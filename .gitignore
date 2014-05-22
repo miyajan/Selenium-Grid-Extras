@@ -1,3 +1,4 @@
+*.example
 .idea
 .iml
 .idea/*
@@ -9,4 +10,6 @@ selenium_grid_extras_config.json
 webdriver/*
 SeleniumGridExtras/SeleniumGridExtras.iml
 SeleniumGridExtras/target/
+SeleniumGridExtras/log/
+log
 tmp

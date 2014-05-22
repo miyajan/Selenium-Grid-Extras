@@ -36,14 +36,13 @@
  */
 package com.groupon.seleniumgridextras.os;
 
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 
-import org.junit.Before;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-import com.groupon.seleniumgridextras.os.MacSystemInfo;
+import static org.junit.Assert.*;
 
 
 public class MacSystemInfoTest {
@@ -52,6 +51,7 @@ public class MacSystemInfoTest {
 
   @Before
   public void setUp() throws Exception {
+    Assume.assumeTrue(RuntimeConfig.getOS().isMac());
     info = new MacSystemInfo();
   }
 

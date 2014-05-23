@@ -38,22 +38,15 @@
 package com.groupon.seleniumgridextras.config;
 
 import com.google.gson.Gson;
-
 import com.groupon.seleniumgridextras.OS;
 import com.groupon.seleniumgridextras.SeleniumGridExtras;
-
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 
 public class RuntimeConfig {
@@ -124,8 +117,14 @@ public class RuntimeConfig {
   }
 
   public static File getSeleniumGridExtrasJarFile() {
-    return new File(
-        SeleniumGridExtras.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+      try {
+          return new File(
+              SeleniumGridExtras.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+      } catch (URISyntaxException e) {
+          logger.error("Could not get jar file");
+          logger.error(e);
+          throw new RuntimeException(e);
+      }
   }
 
 

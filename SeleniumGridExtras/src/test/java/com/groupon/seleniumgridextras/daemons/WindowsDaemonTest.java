@@ -1,10 +1,8 @@
 package com.groupon.seleniumgridextras.daemons;
 
 import com.groupon.seleniumgridextras.config.RuntimeConfig;
-
-import org.junit.Test;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,7 +78,7 @@ public class WindowsDaemonTest {
 
   @Test
   public void testCreateDaemonCommand() throws Exception {
-    assertEquals("schtasks /create /tn foo /xml bar", daemon.createDaemonCommand("foo", "bar"));
+    assertEquals("schtasks /create /tn foo /xml \"bar\"", daemon.createDaemonCommand("foo", "bar"));
   }
 
   @Test

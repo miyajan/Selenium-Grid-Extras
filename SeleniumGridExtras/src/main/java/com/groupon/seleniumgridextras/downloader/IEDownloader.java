@@ -37,11 +37,12 @@
 
 package com.groupon.seleniumgridextras.downloader;
 
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import com.groupon.seleniumgridextras.config.driver.IEDriver;
 
 
 public class IEDownloader extends Downloader {
@@ -105,8 +106,11 @@ public class IEDownloader extends Downloader {
       if (Unzipper.unzip(getDestinationFileFullPath().getAbsolutePath(), getDestinationDir())) {
 
         File tempUnzipedExecutable = new File(getDestinationDir(), "IEDriverServer.exe");
+        IEDriver ieDriver = (IEDriver) RuntimeConfig.getConfig().getIEdriver().clone();
+        ieDriver.setVersion(version);
+        ieDriver.setBit(bit);
         File finalExecutable =
-            new File(RuntimeConfig.getConfig().getIEdriver().getExecutablePath());
+            new File(ieDriver.getExecutablePath());
 
         if (tempUnzipedExecutable.exists()){
           logger.debug(tempUnzipedExecutable.getAbsolutePath());
@@ -120,11 +124,20 @@ public class IEDownloader extends Downloader {
 
 
 
-        tempUnzipedExecutable.renameTo(finalExecutable);
+        if (!tempUnzipedExecutable.renameTo(finalExecutable)) {
+            setErrorMessage("failed to rename from: " + tempUnzipedExecutable.getAbsolutePath() + ", to: " + finalExecutable);
+            return false;
+        }
         setDestinationFile(finalExecutable.getAbsolutePath());
 
-        finalExecutable.setExecutable(true, false);
-        finalExecutable.setReadable(true, false);
+        if (!finalExecutable.setExecutable(true, false)) {
+            setErrorMessage("failed to setExecutable");
+            return false;
+        }
+        if (!finalExecutable.setReadable(true, false)) {
+            setErrorMessage("failed to setReadable");
+            return false;
+        }
 
         return true;
       }

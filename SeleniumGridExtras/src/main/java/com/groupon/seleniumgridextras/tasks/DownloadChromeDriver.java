@@ -37,16 +37,16 @@
 
 package com.groupon.seleniumgridextras.tasks;
 
-import com.google.gson.JsonObject;
-
-import com.groupon.seleniumgridextras.downloader.ChromeDriverDownloader;
-import com.groupon.seleniumgridextras.downloader.Downloader;
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import java.io.File;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.util.Map;
+import com.google.gson.JsonObject;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import com.groupon.seleniumgridextras.config.driver.ChromeDriver;
+import com.groupon.seleniumgridextras.downloader.ChromeDriverDownloader;
+import com.groupon.seleniumgridextras.downloader.Downloader;
 
 public class DownloadChromeDriver extends ExecuteOSTask {
 
@@ -111,7 +111,11 @@ public class DownloadChromeDriver extends ExecuteOSTask {
         downloader =
         new ChromeDriverDownloader(version, bit);
 
-    if (!new File(RuntimeConfig.getConfig().getChromeDriver().getExecutablePath()).exists()) {
+    ChromeDriver chromeDriver = (ChromeDriver) RuntimeConfig.getConfig().getChromeDriver().clone();
+    chromeDriver.setVersion(version);
+    chromeDriver.setBit(bit);
+
+    if (!new File(chromeDriver.getExecutablePath()).exists()) {
       Boolean downloaded = downloader.download();
       getJsonResponse().addKeyValues("source_url", downloader.getSourceURL());
 

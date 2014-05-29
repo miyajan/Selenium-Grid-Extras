@@ -37,16 +37,16 @@
 
 package com.groupon.seleniumgridextras.tasks;
 
-import com.google.gson.JsonObject;
-
-import com.groupon.seleniumgridextras.downloader.Downloader;
-import com.groupon.seleniumgridextras.downloader.IEDownloader;
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import java.io.File;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.util.Map;
+import com.google.gson.JsonObject;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import com.groupon.seleniumgridextras.config.driver.IEDriver;
+import com.groupon.seleniumgridextras.downloader.Downloader;
+import com.groupon.seleniumgridextras.downloader.IEDownloader;
 
 public class DownloadIEDriver extends ExecuteOSTask {
 
@@ -107,8 +107,11 @@ public class DownloadIEDriver extends ExecuteOSTask {
     Downloader
         downloader =
         new IEDownloader(version, bit);
+    IEDriver ieDriver = (IEDriver) RuntimeConfig.getConfig().getIEdriver().clone();
+    ieDriver.setVersion(version);
+    ieDriver.setBit(bit);
 
-    if (!new File(RuntimeConfig.getConfig().getIEdriver().getExecutablePath()).exists()) {
+    if (!new File(ieDriver.getExecutablePath()).exists()) {
       Boolean downloaded = downloader.download();
       getJsonResponse().addKeyValues("source_url", downloader.getSourceURL());
 

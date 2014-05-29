@@ -37,24 +37,22 @@
 
 package com.groupon.seleniumgridextras.tasks;
 
-import com.google.gson.Gson;
-
-import com.groupon.seleniumgridextras.OS;
-import com.groupon.seleniumgridextras.config.Config;
-import com.groupon.seleniumgridextras.config.DefaultConfig;
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.groupon.seleniumgridextras.config.Config;
+import com.groupon.seleniumgridextras.config.DefaultConfig;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import com.groupon.seleniumgridextras.config.driver.ChromeDriver;
+
+import static org.junit.Assert.*;
 
 public class DownloadChromeDriverTest {
 
@@ -127,7 +125,10 @@ public class DownloadChromeDriverTest {
 
     Map firstExec = new Gson().fromJson(task.execute("2.5"), HashMap.class);
 
-    File expectedFile = new File(RuntimeConfig.getConfig().getChromeDriver().getExecutablePath());
+    ChromeDriver expectedDriver = (ChromeDriver) RuntimeConfig.getConfig().getChromeDriver().clone();
+    expectedDriver.setVersion("2.5");
+    expectedDriver.setBit("32");
+    File expectedFile = new File(expectedDriver.getExecutablePath());
 
     assertEquals(new Double(0.0), firstExec.get("exit_code"));
     assertEquals(expectedFile.getName(), ((ArrayList) firstExec.get("file")).get(0));
@@ -143,8 +144,9 @@ public class DownloadChromeDriverTest {
 
     assertEquals(new Double(0.0), secondExec.get("exit_code"));
     assertEquals(0, ((ArrayList) secondExec.get("error")).size());
+      System.out.println(secondExec.get("out"));
     assertEquals("File already downloaded, will not download again",
-                 ((ArrayList) secondExec.get("out")).get(0));
+            ((ArrayList) secondExec.get("out")).get(0));
 
     assertFalse(secondExec.containsKey("root_dir"));
     assertFalse(secondExec.containsKey("source_url"));

@@ -37,11 +37,12 @@
 
 package com.groupon.seleniumgridextras.downloader;
 
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
+import com.groupon.seleniumgridextras.config.driver.ChromeDriver;
 
 public class ChromeDriverDownloader extends Downloader {
 
@@ -95,8 +96,10 @@ public class ChromeDriverDownloader extends Downloader {
 
 
         File tempUnzipedExecutable = new File(getDestinationDir(), chromedriver);
-        File finalExecutable =
-            new File(RuntimeConfig.getConfig().getChromeDriver().getExecutablePath());
+        ChromeDriver chromeDriver = (ChromeDriver) RuntimeConfig.getConfig().getChromeDriver().clone();
+        chromeDriver.setVersion(version);
+        chromeDriver.setBit(bit);
+        File finalExecutable = new File(chromeDriver.getExecutablePath());
 
         if (tempUnzipedExecutable.exists()){
           logger.debug(tempUnzipedExecutable.getAbsolutePath());
@@ -108,12 +111,22 @@ public class ChromeDriverDownloader extends Downloader {
           logger.debug(finalExecutable.getAbsolutePath());
         }
 
-        tempUnzipedExecutable.renameTo(finalExecutable);
+        if (!tempUnzipedExecutable.renameTo(finalExecutable)) {
+            setErrorMessage("failed to rename from: " + tempUnzipedExecutable.getAbsolutePath() + ", to: " + finalExecutable);
+            return false;
+        }
 
         setDestinationFile(finalExecutable.getAbsolutePath());
 
-        finalExecutable.setExecutable(true, false);
-        finalExecutable.setReadable(true, false);
+        if (!finalExecutable.setExecutable(true, false)) {
+            setErrorMessage("failed to setExecutable");
+            return false;
+        }
+
+        if (!finalExecutable.setReadable(true, false)) {
+            setErrorMessage("failed to setReadable");
+            return false;
+        }
 
         return true;
       }

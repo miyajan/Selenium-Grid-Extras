@@ -36,7 +36,6 @@
  */
 package com.groupon.seleniumgridextras.config;
 
-import com.groupon.seleniumgridextras.OS;
 import com.groupon.seleniumgridextras.daemons.DaemonWrapper;
 
 public class DefaultConfig {
@@ -158,7 +157,9 @@ public class DefaultConfig {
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.GetConfig");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.StopGridExtras");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.DownloadIEDriver");
+    config.addActivatedModules("com.groupon.seleniumgridextras.tasks.UpgradeIEDriver");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.DownloadChromeDriver");
+    config.addActivatedModules("com.groupon.seleniumgridextras.tasks.UpgradeChromeDriver");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.IEProtectedMode");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.SystemInfo");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.InstallDaemon");

@@ -39,15 +39,24 @@
 package com.groupon.seleniumgridextras.tasks;
 
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
-import com.google.gson.JsonObject;
+import org.apache.log4j.Logger;
 
+import com.google.gson.JsonObject;
 import com.groupon.seleniumgridextras.ExecuteCommand;
+import com.groupon.seleniumgridextras.JsonResponseBuilder;
 import com.groupon.seleniumgridextras.PortChecker;
+import com.groupon.seleniumgridextras.config.Config;
+import com.groupon.seleniumgridextras.config.Hub;
 import com.groupon.seleniumgridextras.config.RuntimeConfig;
 
 public class StopGrid extends ExecuteOSTask {
+
+  private static Logger logger = Logger.getLogger(StopGrid.class);
 
   public StopGrid() {
     setEndpoint("/stop_grid");
@@ -119,19 +128,44 @@ public class StopGrid extends ExecuteOSTask {
 
   @Override
   public JsonObject execute(String parameter) {
-    String command;
+      Config config = RuntimeConfig.getConfig();
+      if (config.getDefaultRole().equals("hub") && parameter.equals(config.getHub().getPort())) {
+          return stopHub(parameter);
+      } else {
+          return stopNode(parameter);
+      }
+  }
 
-    if (RuntimeConfig.getOS().isWindows()){
-      command = getWindowsCommand(parameter);
-    } else if (RuntimeConfig.getOS().isMac()){
-      command = getMacCommand(parameter);
-    } else {
-      command = getLinuxCommand(parameter);
-    }
+  private JsonObject stopHub(String port) {
+      JsonResponseBuilder builder = new JsonResponseBuilder();
+      Hub hub = RuntimeConfig.getConfig().getHub();
+      try {
+          URL url = new URL("http://" + hub.getHost() + ":" + hub.getPort() + "/lifecycle-manager?action=shutdown");
+          logger.debug(url.toString());
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          conn.setRequestMethod("GET");
+          String out = ExecuteCommand.inputStreamToString(conn.getInputStream());
+          logger.debug(out);
+          builder.addKeyValues("out", out);
+      } catch (IOException e) {
+          builder.addKeyValues("exit_code", 1);
+          builder.addKeyValues("error", "IOException: " + e.getMessage());
+          return builder.getJson();
+      }
+      return new JsonObject();
+  }
 
-    JsonObject foo = ExecuteCommand.execRuntime(command, waitToFinishTask);
+  private JsonObject stopNode(String port) {
+      String command;
+      if (RuntimeConfig.getOS().isWindows()){
+          command = getWindowsCommand(port);
+      } else if (RuntimeConfig.getOS().isMac()){
+          command = getMacCommand(port);
+      } else {
+          command = getLinuxCommand(port);
+      }
 
-    return foo;
+      return ExecuteCommand.execRuntime(command, waitToFinishTask);
   }
 
 }

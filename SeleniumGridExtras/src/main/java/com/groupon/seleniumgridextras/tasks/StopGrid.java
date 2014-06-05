@@ -152,7 +152,7 @@ public class StopGrid extends ExecuteOSTask {
           builder.addKeyValues("error", "IOException: " + e.getMessage());
           return builder.getJson();
       }
-      return new JsonObject();
+      return builder.getJson();
   }
 
   private JsonObject stopNode(String port) {

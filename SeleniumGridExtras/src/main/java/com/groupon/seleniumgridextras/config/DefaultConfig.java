@@ -156,6 +156,7 @@ public class DefaultConfig {
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.StopGrid");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.GetConfig");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.StopGridExtras");
+    config.addActivatedModules("com.groupon.seleniumgridextras.tasks.StopAll");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.DownloadIEDriver");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.UpgradeIEDriver");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.DownloadChromeDriver");

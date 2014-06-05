@@ -1,13 +1,13 @@
 package com.groupon.seleniumgridextras.grid;
 
-import com.google.gson.JsonObject;
+import org.apache.log4j.Logger;
 
+import com.google.gson.JsonObject;
+import com.groupon.seleniumgridextras.ExecuteCommand;
 import com.groupon.seleniumgridextras.PortChecker;
 import com.groupon.seleniumgridextras.config.Config;
 import com.groupon.seleniumgridextras.config.GridNode;
 import com.groupon.seleniumgridextras.config.RuntimeConfig;
-
-import org.apache.log4j.Logger;
 
 public class SelfHealingGrid extends GridStarter {
   private static Logger logger = Logger.getLogger(SelfHealingGrid.class);
@@ -15,6 +15,7 @@ public class SelfHealingGrid extends GridStarter {
   public static void checkStatus(int gridExtrasPort, Config config) {
     if (portOccupied(gridExtrasPort)) {
       logger.info("Already running on port " + gridExtrasPort + " with pid");
+      healHubIfNeeded(config);
       healNodesIfNeeded(config);
       System.exit(0);
     } else {
@@ -23,6 +24,22 @@ public class SelfHealingGrid extends GridStarter {
 
   }
 
+  private static void healHubIfNeeded(Config config) {
+      if (config.getDefaultRole().equals("hub")) {
+          int port = Integer.parseInt(config.getHub().getPort());
+          if (portOccupied(port)) {
+              logger.debug("Hub on port " + port + " is running");
+          } else {
+              logger.debug("Hub on port " + port + " is NOT running, attempting to start");
+
+              Boolean isWindows = RuntimeConfig.getOS().isWindows();
+              logger.debug("isWindows: " + isWindows);
+              String command = getOsSpecificHubStartCommand(isWindows);
+              logger.debug("command: " + command);
+              logger.debug(ExecuteCommand.execRuntime(command, false));
+          }
+      }
+  }
 
   private static void healNodesIfNeeded(Config config) {
     logger.info("Checking if all nodes are running");

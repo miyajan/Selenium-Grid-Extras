@@ -36,13 +36,12 @@
  */
 package com.groupon.seleniumgridextras.tasks;
 
-import com.google.gson.JsonObject;
-
-import com.groupon.seleniumgridextras.tasks.ExecuteOSTask;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import java.util.Map;
+import com.google.gson.JsonObject;
+import com.groupon.seleniumgridextras.JsonResponseBuilder;
 
 public class StopGridExtras extends ExecuteOSTask {
 
@@ -84,7 +83,8 @@ public class StopGridExtras extends ExecuteOSTask {
   public JsonObject execute(Map<String, String> parameter) {
     if (!parameter.isEmpty() && parameter.containsKey("confirm") && parameter.get("confirm").equals("true")) {
       logger.info("Shutdown command received, shutting down.");
-      System.exit(0);
+      setShouldStopServer(true);
+      return new JsonResponseBuilder().getJson();
     }
 
     return execute();

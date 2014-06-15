@@ -37,16 +37,16 @@
 
 package com.groupon.seleniumgridextras.tasks;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import com.google.gson.JsonObject;
 import com.groupon.seleniumgridextras.ExecuteCommand;
 import com.groupon.seleniumgridextras.ExtrasEndPoint;
 import com.groupon.seleniumgridextras.config.RuntimeConfig;
-
-import org.apache.log4j.Logger;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public abstract class ExecuteOSTask extends ExtrasEndPoint {
 
@@ -55,6 +55,7 @@ public abstract class ExecuteOSTask extends ExtrasEndPoint {
       notImplementedError =
       "This task was not implemented on " + RuntimeConfig.getOS().getOSName();
   public boolean waitToFinishTask = true;
+  private boolean shouldStopServer = false;
 
   private static Logger logger = Logger.getLogger(ExecuteOSTask.class);
 
@@ -168,6 +169,14 @@ public abstract class ExecuteOSTask extends ExtrasEndPoint {
   public List<String> getDependencies() {
     List<String> dependencies = new LinkedList();
     return dependencies;
+  }
+
+  public boolean shouldStopServer() {
+    return shouldStopServer;
+  }
+
+  protected void setShouldStopServer(boolean shouldStopServer) {
+    this.shouldStopServer = shouldStopServer;
   }
 
 }

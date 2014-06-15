@@ -60,7 +60,9 @@ public class StopAll extends ExecuteOSTask {
             StopGridExtras stopGridExtras = new StopGridExtras();
             Map<String, String> parameter = new HashMap<>();
             parameter.put("confirm", "true");
-            return stopGridExtras.execute(parameter);
+            JsonObject response = stopGridExtras.execute(parameter);
+            setShouldStopServer(stopGridExtras.shouldStopServer());
+            return response;
         }
 
         getJsonResponse().addKeyValues("error", "Pass in confirm=true");

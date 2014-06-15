@@ -37,22 +37,23 @@
 
 package com.groupon.seleniumgridextras;
 
-import com.google.gson.GsonBuilder;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import com.google.gson.GsonBuilder;
 import com.groupon.seleniumgridextras.config.RuntimeConfig;
 import com.groupon.seleniumgridextras.grid.SelfHealingGrid;
 import com.groupon.seleniumgridextras.tasks.ExecuteOSTask;
 import com.groupon.seleniumgridextras.tasks.StartGrid;
 import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class SeleniumGridExtras {
 
@@ -67,7 +68,7 @@ public class SeleniumGridExtras {
 
     SelfHealingGrid.checkStatus(RuntimeConfig.getGridExtrasPort(), RuntimeConfig.getConfig());
 
-    HttpServer
+    final HttpServer
         server =
         HttpServer.create(new InetSocketAddress(RuntimeConfig.getGridExtrasPort()), 0);
 
@@ -93,6 +94,15 @@ public class SeleniumGridExtras {
                 result =
                 new GsonBuilder().setPrettyPrinting().create().toJson(task.execute(params));
             return result;
+          }
+
+          @Override
+          public void handle(HttpExchange t) throws IOException {
+            super.handle(t);
+            if (task.shouldStopServer()) {
+              server.stop(0);
+              logger.info("Server has been stopped.");
+            }
           }
         });
 

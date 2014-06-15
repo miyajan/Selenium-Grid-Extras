@@ -56,12 +56,12 @@ public class GetProcesses extends ExecuteOSTask {
   }
 
   @Override
-  public String getWindowsCommand() {
+  public String getWindowsCommand(String parameter) {
     return "tasklist";
   }
 
   @Override
-  public String getLinuxCommand() {
+  public String getLinuxCommand(String parameter) {
     return "ps x";
   }
 

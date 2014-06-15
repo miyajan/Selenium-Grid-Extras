@@ -87,7 +87,7 @@ public abstract class ExecuteOSTask extends ExtrasEndPoint {
   }
 
   public String getWindowsCommand(String parameter) {
-
+    logger.warn(notImplementedError);
     getJsonResponse().addKeyValues("error",
         notImplementedError + " " + this.getClass().getCanonicalName());
 
@@ -100,6 +100,7 @@ public abstract class ExecuteOSTask extends ExtrasEndPoint {
   }
 
   public String getLinuxCommand(String parameter) {
+    logger.warn(notImplementedError);
     getJsonResponse().addKeyValues("error",
         notImplementedError + " " + this.getClass().getCanonicalName());
 

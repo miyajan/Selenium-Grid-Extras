@@ -101,6 +101,7 @@ public class ExecuteCommand {
       if (!error.equals("")) {
         //Only add error if there is one, this way we have a nice empty array instead of [""]
         jsonResponse.addKeyValues("error", error);
+        logger.warn("Error (cmd: " + cmd + ", error: " + error + ")");
       }
       return jsonResponse.getJson();
     } catch (IOException e) {

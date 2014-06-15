@@ -37,14 +37,14 @@
 
 package com.groupon.seleniumgridextras;
 
-import com.google.gson.JsonObject;
-
-import com.groupon.seleniumgridextras.config.RuntimeConfig;
-
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import com.google.gson.JsonObject;
+import com.groupon.seleniumgridextras.config.RuntimeConfig;
 
 
 public class ExecuteCommand {
@@ -115,12 +115,6 @@ public class ExecuteCommand {
   }
 
   public static String inputStreamToString(InputStream is) throws IOException {
-    StringBuilder result = new StringBuilder();
-    int in;
-    while ((in = is.read()) != -1) {
-      result.append((char) in);
-    }
-    is.close();
-    return result.toString();
+    return IOUtils.toString(is);
   }
 }

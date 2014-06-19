@@ -1,11 +1,7 @@
 package com.groupon.seleniumgridextras.config.capabilities;
 
-import com.google.gson.internal.StringMap;
-
-import com.groupon.seleniumgridextras.config.GridNode;
-
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class Capability extends HashMap {
@@ -54,7 +50,7 @@ public abstract class Capability extends HashMap {
   }
 
   public static Map<Class, String> getSupportedCapabilities() {
-    Map<Class, String> capabilityHash = new HashMap<Class, String>();
+    Map<Class, String> capabilityHash = new LinkedHashMap<>();
 
     capabilityHash.put(Firefox.class, "firefox");
     capabilityHash.put(InternetExplorer.class, "internet explorer");

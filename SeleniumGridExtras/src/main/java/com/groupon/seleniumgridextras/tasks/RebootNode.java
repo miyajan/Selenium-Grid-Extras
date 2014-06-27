@@ -55,7 +55,7 @@ public class RebootNode extends ExecuteOSTask {
 
   @Override
   public String getWindowsCommand(String parameter) {
-    return "shutdown -r -t 1 -f";
+    return "shutdown -r -t 5 -f";
   }
 
   @Override

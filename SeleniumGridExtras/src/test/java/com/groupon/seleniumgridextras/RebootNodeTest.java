@@ -37,12 +37,13 @@
 
 package com.groupon.seleniumgridextras;
 
-import com.groupon.seleniumgridextras.tasks.ExecuteOSTask;
-import com.groupon.seleniumgridextras.tasks.RebootNode;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import com.groupon.seleniumgridextras.tasks.ExecuteOSTask;
+import com.groupon.seleniumgridextras.tasks.RebootNode;
+
+import static org.junit.Assert.*;
 
 public class RebootNodeTest {
 
@@ -52,7 +53,7 @@ public class RebootNodeTest {
   @Before
   public void setUp() throws Exception {
     task = new RebootNode();
-    windowsCommand = "shutdown -r -t 1 -f";
+    windowsCommand = "shutdown -r -t 5 -f";
   }
 
   @Test

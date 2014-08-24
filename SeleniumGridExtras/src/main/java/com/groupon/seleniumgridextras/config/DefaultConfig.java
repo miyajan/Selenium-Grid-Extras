@@ -164,6 +164,7 @@ public class DefaultConfig {
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.IEProtectedMode");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.SystemInfo");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.InstallDaemon");
+    config.addActivatedModules("com.groupon.seleniumgridextras.tasks.ExecuteCommand");
   }
 
   private static void loadDisabledPlugins() {

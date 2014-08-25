@@ -165,6 +165,7 @@ public class DefaultConfig {
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.SystemInfo");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.InstallDaemon");
     config.addActivatedModules("com.groupon.seleniumgridextras.tasks.ExecuteCommand");
+    config.addActivatedModules("com.groupon.seleniumgridextras.tasks.ActivateModule");
   }
 
   private static void loadDisabledPlugins() {

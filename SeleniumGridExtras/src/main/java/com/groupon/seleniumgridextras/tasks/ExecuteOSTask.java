@@ -83,7 +83,7 @@ public abstract class ExecuteOSTask extends ExtrasEndPoint {
         command = getLinuxCommand(parameter);
      }
 
-    return ExecuteCommand.execRuntime(command + parameter, waitToFinishTask);
+    return ExecuteCommand.execRuntime(command, waitToFinishTask);
   }
 
   public String getWindowsCommand(String parameter) {
